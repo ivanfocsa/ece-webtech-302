@@ -28,3 +28,22 @@ create table if not exists public.comments (
   content text not null,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
+
+-- 3. Table des Likes
+create table if not exists public.likes (
+  id uuid primary key default gen_random_uuid(),
+  article_id uuid references public.articles(id) on delete cascade not null,
+  user_id uuid references auth.users(id) on delete cascade not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  constraint unique_article_user_like unique (article_id, user_id)
+);
+
+-- 4. Table des Contacts
+create table if not exists public.contacts (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  email text not null,
+  subject text not null,
+  message text not null,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null
+);
