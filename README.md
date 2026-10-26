@@ -175,3 +175,7 @@ Toutes les tables PostgreSQL (`articles`, `comments`, `likes`, `contacts`) dispo
 - [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) : Découpage Server vs Client Components et arborescence.
 - [`docs/RENDERING.md`](./docs/RENDERING.md) : Tableau comparatif des 5 méthodes de rendu avec logs de build.
 - [`docs/AUTH.md`](./docs/AUTH.md) : Schéma d'authentification OAuth 2.0 GitHub & gestion des sessions.
+
+### ❓ FAQ & Dépannage
+- **Erreur de connexion Supabase** : Si vos variables d'environnement ne sont pas encore renseignées dans `.env.local`, l'application bascule automatiquement sur les données de démonstration locales (`lib/mock-data.js`). Vous pouvez donc tester et builder sans blocage.
+- **Droits d'édition RLS** : Si la modification d'un article échoue, vérifiez que vous êtes connecté avec le compte qui a créé cet article (règle `auth.uid() = user_id`).
