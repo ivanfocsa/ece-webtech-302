@@ -2,16 +2,16 @@
 
 @layer base {
   :root {
-    --background: #090d16;
-    --surface: #111827;
-    --surface-card: #141c2e;
-    --surface-hover: #1e293b;
-    --border: #1e293b;
-    --primary: #3b82f6;
-    --primary-hover: #2563eb;
-    --accent: #8b5cf6;
-    --text-main: #f8fafc;
-    --text-muted: #94a3b8;
+    --background: #000000;
+    --surface: #09090b;
+    --surface-card: #0a0a0a;
+    --surface-hover: #18181b;
+    --border: #27272a;
+    --primary: #ffffff;
+    --primary-hover: #e4e4e7;
+    --accent: #a1a1aa;
+    --text-main: #f4f4f5;
+    --text-muted: #71717a;
   }
 
   body {
@@ -25,55 +25,32 @@
   }
 }
 
-.gradient-title {
-  background: linear-gradient(135deg, #60a5fa 0%, #a855f7 50%, #ec4899 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.gradient-subtle {
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.7) 100%);
-}
-
-.badge-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.2rem 0.65rem;
-  font-size: 0.75rem;
-  font-weight: 600;
-  border-radius: 9999px;
-  letter-spacing: 0.025em;
-  text-transform: uppercase;
-}
-
 .card-transition {
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .card-transition:hover {
-  transform: translateY(-2px);
-  border-color: #3b82f6;
-  box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.1);
+  border-color: #52525b;
 }
 
 .article-prose {
   line-height: 1.8;
   font-size: 1.05rem;
-  color: #cbd5e1;
+  color: #d4d4d8;
 }
 
 .article-prose h2 {
-  color: #f8fafc;
+  color: #ffffff;
   font-size: 1.5rem;
   font-weight: 700;
   margin-top: 2rem;
   margin-bottom: 0.75rem;
-  border-bottom: 1px solid #1e293b;
+  border-bottom: 1px solid #27272a;
   padding-bottom: 0.5rem;
 }
 
 .article-prose h3 {
-  color: #f1f5f9;
+  color: #f4f4f5;
   font-size: 1.25rem;
   font-weight: 600;
   margin-top: 1.5rem;
@@ -91,8 +68,9 @@
 }
 
 .article-prose code {
-  background-color: #1e293b;
-  color: #93c5fd;
+  background-color: #18181b;
+  color: #f4f4f5;
+  border: 1px solid #27272a;
   padding: 0.15rem 0.4rem;
   border-radius: 0.25rem;
   font-size: 0.9em;
@@ -100,8 +78,8 @@
 }
 
 .article-prose pre {
-  background-color: #0f172a;
-  border: 1px solid #1e293b;
+  background-color: #09090b;
+  border: 1px solid #27272a;
   border-radius: 0.5rem;
   padding: 1rem;
   overflow-x: auto;
@@ -111,11 +89,12 @@
 .article-prose pre code {
   background-color: transparent;
   padding: 0;
-  color: #e2e8f0;
+  border: none;
+  color: #f4f4f5;
 }
 
-/* Accessibilité : Focus rings visibles pour la navigation au clavier */
-a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
-  outline: 2px solid #3b82f6;
+/* Accessibilité : Focus rings visibles et neutres */
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+  outline: 2px solid #ffffff;
   outline-offset: 2px;
 }

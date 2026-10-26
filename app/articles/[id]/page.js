@@ -35,9 +35,9 @@ export default async function ArticleDetailPage({ params }) {
   });
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
       {/* Fil d'Ariane & Actions auteur */}
-      <div className="flex items-center justify-between text-xs text-slate-400">
+      <div className="flex items-center justify-between text-xs text-zinc-400">
         <Link href="/articles" className="hover:text-white flex items-center gap-1 transition-colors">
           ← Retour aux articles
         </Link>
@@ -45,7 +45,7 @@ export default async function ArticleDetailPage({ params }) {
           <div className="flex items-center gap-2">
             <Link
               href={`/articles/${article.id}/edit`}
-              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 transition-colors"
+              className="px-3 py-1.5 rounded-md text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-700 transition-colors"
             >
               Modifier
             </Link>
@@ -55,33 +55,33 @@ export default async function ArticleDetailPage({ params }) {
       </div>
 
       {/* En-tête de l'article */}
-      <header className="space-y-4 border-b border-slate-800 pb-8">
+      <header className="space-y-4 border-b border-zinc-800 pb-8">
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+          <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-800">
             {article.category}
           </span>
-          <span className="text-xs text-slate-500">•</span>
-          <span className="text-xs text-slate-400">{article.reading_time || '4 min'} de lecture</span>
-          <span className="text-xs text-slate-500">•</span>
-          <span className="text-xs text-purple-400 font-mono">SSG Dynamique</span>
+          <span className="text-xs text-zinc-600">•</span>
+          <span className="text-xs text-zinc-400 font-mono">{article.reading_time || '4 min'} de lecture</span>
+          <span className="text-xs text-zinc-600">•</span>
+          <span className="text-[11px] text-zinc-500 font-mono">SSG Dynamique</span>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-tight">
+        <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight leading-tight">
           {article.title}
         </h1>
 
-        <p className="text-lg text-slate-300 leading-relaxed italic border-l-2 border-blue-500 pl-4 py-1">
+        <p className="text-base text-zinc-400 leading-relaxed italic border-l border-zinc-600 pl-4 py-1">
           {article.summary}
         </p>
 
         <div className="flex items-center justify-between pt-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-blue-400 text-sm">
+            <div className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 flex items-center justify-center font-bold text-white text-xs">
               {(article.author_name || 'U')[0].toUpperCase()}
             </div>
             <div>
-              <div className="text-sm font-semibold text-white">{article.author_name}</div>
-              <div className="text-xs text-slate-500">Publié le {dateFormatted}</div>
+              <div className="text-xs font-semibold text-white">{article.author_name}</div>
+              <div className="text-[11px] text-zinc-500 font-mono">Publié le {dateFormatted}</div>
             </div>
           </div>
 
@@ -90,7 +90,7 @@ export default async function ArticleDetailPage({ params }) {
       </header>
 
       {/* Contenu principal */}
-      <div className="article-prose text-slate-300 space-y-4 whitespace-pre-wrap leading-relaxed text-base">
+      <div className="article-prose text-zinc-300 space-y-4 whitespace-pre-wrap leading-relaxed text-sm">
         {article.content}
       </div>
 

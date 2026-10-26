@@ -65,27 +65,27 @@ export default function NewArticlePage() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
-      <div className="border-b border-slate-800 pb-4">
-        <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">
+      <div className="border-b border-zinc-800 pb-4">
+        <span className="text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-zinc-900 text-zinc-400 border border-zinc-800">
           CSR & Route Protégée
         </span>
-        <h1 className="text-3xl font-extrabold text-white tracking-tight mt-1">
+        <h1 className="text-2xl font-bold text-white tracking-tight mt-1">
           Rédiger un nouvel article
         </h1>
-        <p className="text-sm text-slate-400">
-          Partagez une astuce, une analyse ou un retour d&apos;expérience avec la communauté.
+        <p className="text-xs text-zinc-400">
+          Partagez une analyse technique ou un retour d&apos;expérience avec la communauté.
         </p>
       </div>
 
       {/* Onglets Éditeur / Prévisualisation */}
-      <div className="flex border-b border-slate-800">
+      <div className="flex border-b border-zinc-800">
         <button
           type="button"
           onClick={() => setPreviewTab(false)}
-          className={`px-4 py-2 text-sm font-semibold border-b-2 transition-colors ${
+          className={`px-4 py-2 text-xs font-semibold border-b-2 transition-colors ${
             !previewTab
-              ? 'border-blue-500 text-white'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-white text-white'
+              : 'border-transparent text-zinc-400 hover:text-zinc-200'
           }`}
         >
           Éditeur
@@ -93,10 +93,10 @@ export default function NewArticlePage() {
         <button
           type="button"
           onClick={() => setPreviewTab(true)}
-          className={`px-4 py-2 text-sm font-semibold border-b-2 transition-colors ${
+          className={`px-4 py-2 text-xs font-semibold border-b-2 transition-colors ${
             previewTab
-              ? 'border-blue-500 text-white'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-white text-white'
+              : 'border-transparent text-zinc-400 hover:text-zinc-200'
           }`}
         >
           Prévisualisation
@@ -106,7 +106,7 @@ export default function NewArticlePage() {
       {!previewTab ? (
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+            <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider">
               Titre de l&apos;article *
             </label>
             <input
@@ -115,19 +115,19 @@ export default function NewArticlePage() {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="ex: Sécuriser vos APIs avec Row Level Security"
               required
-              className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm"
+              className="w-full bg-zinc-950 border border-zinc-800 rounded-md px-3.5 py-2.5 text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 text-xs"
             />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider">
                 Catégorie *
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-blue-500 text-sm"
+                className="w-full bg-zinc-950 border border-zinc-800 rounded-md px-3.5 py-2.5 text-white focus:outline-none focus:border-zinc-500 text-xs"
               >
                 {categories.map((c) => (
                   <option key={c} value={c}>
@@ -138,72 +138,75 @@ export default function NewArticlePage() {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+              <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider">
                 Auteur
               </label>
               <input
                 type="text"
                 disabled
                 value={user?.user_metadata?.full_name || user?.email || 'Chargement...'}
-                className="w-full bg-slate-900/50 border border-slate-800 rounded-lg px-4 py-2.5 text-slate-400 text-sm cursor-not-allowed"
+                className="w-full bg-zinc-950/50 border border-zinc-800 rounded-md px-3.5 py-2.5 text-zinc-500 text-xs font-mono cursor-not-allowed"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-              Résumé d&apos;accroche (1-2 phrases) *
+            <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider">
+              Résumé introductif * (1 à 2 phrases)
             </label>
             <textarea
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
-              placeholder="Un résumé concis qui s'affichera sur la carte d'article..."
+              placeholder="Synthèse claire pour le catalogue..."
               rows={2}
               required
-              className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm resize-none"
+              className="w-full bg-zinc-950 border border-zinc-800 rounded-md px-3.5 py-2.5 text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 text-xs resize-none"
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
-              Contenu de l&apos;article *
+            <label className="text-[11px] font-semibold text-zinc-300 uppercase tracking-wider">
+              Corps de l&apos;article * (Format texte ou Markdown simple)
             </label>
             <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="Rédigez votre article technique avec vos explications, code snippets et conclusions..."
+              placeholder="Rédigez votre contenu ici..."
               rows={12}
               required
-              className="w-full bg-slate-900 border border-slate-800 rounded-lg p-4 text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 text-sm font-mono resize-y"
+              className="w-full bg-zinc-950 border border-zinc-800 rounded-md px-3.5 py-2.5 text-white placeholder-zinc-500 focus:outline-none focus:border-zinc-500 text-xs leading-relaxed font-mono"
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-zinc-800">
             <button
               type="button"
               onClick={() => router.back()}
-              className="px-4 py-2 text-sm text-slate-400 hover:text-white transition-colors"
+              className="px-4 py-2 text-xs font-medium text-zinc-400 hover:text-white transition-colors"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 rounded-lg text-sm font-semibold bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white shadow-md shadow-blue-500/20 transition-all"
+              className="px-5 py-2 rounded-md text-xs font-semibold bg-white hover:bg-zinc-200 text-black disabled:opacity-50 transition-colors"
             >
-              {loading ? 'Publication en cours...' : "Publier l'article"}
+              {loading ? 'Publication en cours...' : 'Publier l article'}
             </button>
           </div>
         </form>
       ) : (
-        <div className="p-6 bg-slate-900/40 border border-slate-800 rounded-xl space-y-4">
-          <span className="text-xs uppercase font-bold text-blue-400">{category}</span>
-          <h2 className="text-3xl font-extrabold text-white">{title || "Titre de l'article"}</h2>
-          <p className="text-base text-slate-300 italic border-l-2 border-blue-500 pl-3">
-            {summary || "Résumé d'accroche..."}
-          </p>
-          <div className="pt-4 border-t border-slate-800/80 text-slate-300 whitespace-pre-wrap font-sans leading-relaxed">
-            {content || "Contenu complet de l'article..."}
+        /* Vue Prévisualisation */
+        <div className="space-y-6 bg-zinc-950 border border-zinc-800 rounded-lg p-6">
+          <div className="border-b border-zinc-800 pb-4 space-y-2">
+            <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-900 text-zinc-300 border border-zinc-800">
+              {category}
+            </span>
+            <h2 className="text-2xl font-bold text-white">{title || 'Titre non renseigné'}</h2>
+            <p className="text-xs text-zinc-400 italic">{summary || 'Résumé non renseigné'}</p>
+          </div>
+          <div className="article-prose text-zinc-300 whitespace-pre-wrap text-xs">
+            {content || 'Aucun contenu rédigé pour le moment.'}
           </div>
         </div>
       )}
