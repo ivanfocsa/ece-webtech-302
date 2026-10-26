@@ -7,7 +7,9 @@
 [![React 19](https://img.shields.io/badge/React-19.0-blue?logo=react)](https://react.dev/)
 [![Tailwind CSS 4](https://img.shields.io/badge/Tailwind_CSS-4.0-38bdf8?logo=tailwindcss)](https://tailwindcss.com/)
 [![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL_%26_Auth-3ecf8e?logo=supabase)](https://supabase.com/)
-[![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel)](https://vercel.com/)
+[![Vercel](https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel)](https://ece-webtech-302.vercel.app)
+
+🌐 **Application déployée en production :** [https://ece-webtech-302.vercel.app](https://ece-webtech-302.vercel.app)
 
 ---
 
