@@ -127,3 +127,6 @@ drop policy if exists "Seuls les utilisateurs authentifiés peuvent lire les con
 create policy "Seuls les utilisateurs authentifiés peuvent lire les contacts"
   on public.contacts for select
   using (auth.role() = 'authenticated');
+
+-- Index composite pour optimiser le filtrage par categorie et tri par date
+create index if not exists idx_articles_cat_created on public.articles(category, created_at desc);
