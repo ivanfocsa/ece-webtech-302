@@ -90,3 +90,11 @@ Route (app)                                 Size  First Load JS  Revalidate  Exp
 ●  (SSG)      prerendered as static HTML (uses generateStaticParams)
 ƒ  (Dynamic)  server-rendered on demand (SSR)
 ```
+
+---
+
+## 4. Vérification en Ligne
+
+L'ensemble de ces stratégies est testable en temps réel sur le déploiement de production Vercel :  
+👉 **[https://ece-webtech-302.vercel.app](https://ece-webtech-302.vercel.app)**
+
