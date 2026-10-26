@@ -12,21 +12,33 @@ export default function Navbar() {
   const pathname = usePathname();
 
   useEffect(() => {
-    const supabase = createClient();
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !key || key === 'placeholder-anon-key' || key.length < 20) {
+      return;
+    }
 
-    // Récupérer la session courante
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
+    try {
+      const supabase = createClient();
 
-    // Écouter les changements d'authentification
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
+      // Récupérer la session courante
+      supabase.auth.getUser()
+        .then(({ data: { user } }) => {
+          setUser(user ?? null);
+        })
+        .catch(() => {});
 
-    return () => {
-      subscription.unsubscribe();
-    };
+      // Écouter les changements d'authentification
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        setUser(session?.user ?? null);
+      });
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    } catch {
+      // Ignorer si les clés ne sont pas encore configurées
+    }
   }, []);
 
   // Fermer le menu mobile lors d'un changement d'URL

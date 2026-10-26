@@ -12,15 +12,26 @@ export default function CommentSection({ articleId }) {
   const [fetching, setFetching] = useState(true);
 
   useEffect(() => {
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (key && key !== 'placeholder-anon-key' && key.length > 20) {
+      try {
+        const supabase = createClient();
+        supabase.auth.getUser()
+          .then(({ data: { user } }) => {
+            setUser(user ?? null);
+          })
+          .catch(() => {});
+      } catch {
+        // Fallback silencieux
+      }
+    }
 
-    getArticleComments(articleId).then((data) => {
-      setComments(data || []);
-      setFetching(false);
-    });
+    getArticleComments(articleId)
+      .then((data) => {
+        setComments(data || []);
+        setFetching(false);
+      })
+      .catch(() => setFetching(false));
   }, [articleId]);
 
   const handleSubmit = async (e) => {
