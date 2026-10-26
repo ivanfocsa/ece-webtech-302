@@ -7,7 +7,7 @@ Ce document détaille l'organisation structurelle, le cycle de vie des requêtes
 ## 1. Arborescence Applicative (Next.js 15 App Router)
 
 ```text
-devboard/
+ece-webtech-302/
 ├── app/
 │   ├── layout.js              # [Server] Layout racine (HTML, polices, métadonnées, structure)
 │   ├── globals.css            # Feuille de styles globale Tailwind CSS 4

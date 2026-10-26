@@ -70,8 +70,8 @@ Le projet respecte à 100% les consignes pédagogiques du cours en implémentant
 
 ### 1. Cloner le dépôt
 ```bash
-git clone https://github.com/ivanfocsa/devboard.git
-cd devboard
+git clone https://github.com/ivanfocsa/ece-webtech-302.git
+cd ece-webtech-302
 ```
 
 ### 2. Installer les dépendances
@@ -112,7 +112,7 @@ La compilation génère et affiche clairement la matrice des 5 stratégies de re
 ## 📂 Structure du Projet
 
 ```text
-devboard/
+ece-webtech-302/
 ├── app/
 │   ├── layout.js              # Layout global (Navbar, Footer, SEO)
 │   ├── globals.css            # Tailwind CSS 4 & design system
