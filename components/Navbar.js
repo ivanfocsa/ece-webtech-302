@@ -21,14 +21,12 @@ export default function Navbar() {
     try {
       const supabase = createClient();
 
-      // Récupérer la session courante
       supabase.auth.getUser()
         .then(({ data: { user } }) => {
           setUser(user ?? null);
         })
         .catch(() => {});
 
-      // Écouter les changements d'authentification
       const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
         setUser(session?.user ?? null);
       });
@@ -37,18 +35,19 @@ export default function Navbar() {
         subscription.unsubscribe();
       };
     } catch {
-      // Ignorer si les clés ne sont pas encore configurées
+      // Pas d'interruption si les clés sont en cours d'initialisation
     }
   }, []);
 
-  // Fermer le menu mobile lors d'un changement d'URL
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [pathname]);
 
   const handleSignOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
+    try {
+      const supabase = createClient();
+      await supabase.auth.signOut();
+    } catch {}
     setUser(null);
     router.push('/');
     router.refresh();
@@ -62,22 +61,15 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-zinc-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo Minimaliste */}
-          <div className="flex items-center space-x-3">
-            <Link href="/" className="flex items-center space-x-2.5 group">
-              <span className="w-7 h-7 rounded bg-white text-black flex items-center justify-center font-bold text-sm transition-transform group-hover:scale-105">
-                ⚡
-              </span>
-              <span className="text-base font-bold tracking-tight text-white group-hover:text-zinc-300 transition-colors">
-                DevBoard
-              </span>
-            </Link>
-          </div>
+    <header className="sticky top-0 z-50 bg-black/95 backdrop-blur border-b border-zinc-800">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-14">
+          {/* Logo sobre sans icône superflue */}
+          <Link href="/" className="text-base font-bold tracking-tight text-white hover:text-zinc-300 transition-colors">
+            DevBoard
+          </Link>
 
-          {/* Navigation Bureau */}
+          {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-6 text-sm">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
@@ -95,31 +87,26 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Actions Utilisateur */}
+          {/* Actions */}
           <div className="hidden md:flex items-center space-x-3">
             <Link
               href="/articles/new"
-              className="px-3.5 py-1.5 rounded-md text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-100 border border-zinc-700 transition-colors"
+              className="px-3 py-1.5 rounded-md text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-zinc-800 transition-colors"
             >
-              + Écrire
+              Écrire un article
             </Link>
 
             {user ? (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 text-xs">
                 <Link
                   href="/profile"
-                  className="flex items-center space-x-2 text-xs text-zinc-300 hover:text-white border border-zinc-800 px-3 py-1.5 rounded-md bg-zinc-950 transition-colors"
+                  className="text-zinc-300 hover:text-white transition-colors"
                 >
-                  <span className="w-5 h-5 rounded-full bg-white text-black text-[10px] font-bold flex items-center justify-center">
-                    {(user.user_metadata?.full_name || user.email || 'U')[0].toUpperCase()}
-                  </span>
-                  <span className="max-w-[120px] truncate">
-                    {user.user_metadata?.full_name || user.email.split('@')[0]}
-                  </span>
+                  {user.user_metadata?.full_name || user.email?.split('@')[0]}
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="text-xs text-zinc-400 hover:text-white transition-colors"
+                  className="text-zinc-500 hover:text-zinc-300 transition-colors"
                 >
                   Déconnexion
                 </button>
@@ -127,20 +114,20 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/login"
-                className="px-3.5 py-1.5 rounded-md text-xs font-semibold bg-white hover:bg-zinc-200 text-black transition-colors"
+                className="px-3 py-1.5 rounded-md text-xs font-medium bg-white hover:bg-zinc-200 text-black transition-colors"
               >
                 Connexion
               </Link>
             )}
           </div>
 
-          {/* Bouton Hamburger Mobile */}
+          {/* Menu Mobile */}
           <div className="flex md:hidden">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="text-zinc-400 hover:text-white p-2 rounded-md"
-              aria-label="Ouvrir le menu"
+              className="text-zinc-400 hover:text-white p-1.5 rounded"
+              aria-label="Menu"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {mobileMenuOpen ? (
@@ -154,50 +141,45 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Menu Déroulant Mobile */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-zinc-800 bg-black px-4 pt-2 pb-6 space-y-3">
-          <div className="space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="block px-3 py-2 rounded-md text-sm text-zinc-300 hover:bg-zinc-900 hover:text-white"
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          <div className="pt-3 border-t border-zinc-800 flex flex-col gap-2">
+        <div className="md:hidden border-b border-zinc-800 bg-black px-4 pt-2 pb-4 space-y-2">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="block px-2 py-1.5 text-sm text-zinc-300 hover:text-white"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div className="pt-2 border-t border-zinc-800 flex flex-col gap-2">
             <Link
               href="/articles/new"
-              className="block text-center py-2 rounded-md text-xs font-medium bg-zinc-900 border border-zinc-700 text-zinc-100"
+              className="text-center py-1.5 rounded text-xs font-medium bg-zinc-900 border border-zinc-800 text-zinc-200"
             >
-              + Rédiger un article
+              Écrire un article
             </Link>
-
             {user ? (
               <>
                 <Link
                   href="/profile"
-                  className="block text-center py-2 rounded-md text-xs font-medium border border-zinc-800 bg-zinc-950 text-white"
+                  className="text-center py-1.5 rounded text-xs text-zinc-300"
                 >
-                  Mon profil ({user.email})
+                  Mon compte ({user.email})
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="w-full text-center py-2 rounded-md text-xs text-zinc-400 hover:text-white"
+                  className="text-center py-1.5 text-xs text-zinc-500 hover:text-zinc-300"
                 >
-                  Se déconnecter
+                  Déconnexion
                 </button>
               </>
             ) : (
               <Link
                 href="/login"
-                className="block text-center py-2 rounded-md text-xs font-semibold bg-white text-black"
+                className="text-center py-1.5 rounded text-xs font-medium bg-white text-black"
               >
-                Se connecter
+                Connexion
               </Link>
             )}
           </div>
