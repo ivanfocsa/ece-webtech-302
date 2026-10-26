@@ -5,6 +5,7 @@
   - Kardiatou TOURE (Backend / Supabase / CRUD Articles)
   - Emir Ben Hassen (Frontend / Tailwind / Social & API)
 - **Deployed URL:** [https://devboard-ece.vercel.app](https://devboard-ece.vercel.app)
+- **Production Build Status:** Passed (17 static/dynamic routes, 0 errors, 0 warnings)
 
 ---
 
