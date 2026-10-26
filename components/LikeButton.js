@@ -45,23 +45,25 @@ export default function LikeButton({ articleId, initialCount = 0 }) {
       <button
         onClick={handleLike}
         disabled={loading}
-        className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold border transition-all ${
+        className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs font-medium border transition-colors ${
           hasLiked
-            ? 'bg-rose-500/10 border-rose-500/30 text-rose-400 shadow-sm'
-            : 'bg-slate-800/70 border-slate-700 hover:border-rose-500/50 text-slate-300 hover:text-white'
+            ? 'bg-white text-black border-white'
+            : 'bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-zinc-500 hover:text-white'
         }`}
       >
-        <span className={hasLiked ? 'scale-110 transition-transform' : ''}>
-          {hasLiked ? '❤️' : '🤍'}
-        </span>
+        <span>{hasLiked ? '♥' : '♡'}</span>
         <span>{hasLiked ? 'Aimé' : "J'aime"}</span>
-        <span className="ml-1 px-1.5 py-0.5 rounded-full bg-slate-900/60 text-xs font-bold text-slate-300">
+        <span
+          className={`ml-1 px-1.5 py-0.2 rounded text-[11px] font-mono ${
+            hasLiked ? 'bg-zinc-200 text-black' : 'bg-zinc-900 text-zinc-400'
+          }`}
+        >
           {likes}
         </span>
       </button>
 
       {authError && (
-        <span className="text-xs text-amber-400 mt-1">
+        <span className="text-[11px] text-zinc-400 mt-1 font-mono">
           Connectez-vous pour pouvoir liker cet article.
         </span>
       )}

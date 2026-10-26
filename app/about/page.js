@@ -26,104 +26,109 @@ export default function AboutPage() {
       role: 'Frontend / Tailwind CSS 4 / Social & API',
       github: 'https://github.com/Emirates917',
       tasks:
-        'Design system avec Tailwind CSS 4, layout responsive avec menu mobile, LikeButton optimiste, CommentSection réactive, intégration Open-Meteo.',
+        'Design system épuré avec Tailwind CSS 4, layout responsive avec menu mobile, LikeButton optimiste, CommentSection réactive, intégration Open-Meteo.',
     },
   ];
 
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
-      <header className="space-y-4 border-b border-slate-800 pb-8">
-        <span className="inline-block text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20">
+      <header className="space-y-3 border-b border-zinc-800 pb-8">
+        <span className="inline-block text-[10px] font-mono font-medium px-2 py-0.5 rounded bg-zinc-900 text-zinc-400 border border-zinc-800">
           SSG (Static Site Generation)
         </span>
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-white">À Propos de DevBoard</h1>
-        <p className="text-slate-400 text-base leading-relaxed">
+        <h1 className="text-3xl font-bold text-white tracking-tight">À Propos de DevBoard</h1>
+        <p className="text-zinc-400 text-sm leading-relaxed max-w-2xl">
           DevBoard est le projet final développé par notre groupe de 3 étudiants dans le cadre du
           cours{' '}
           <a
             href="https://github.com/adaltas/ece-webtech-2026-fall"
             target="_blank"
             rel="noreferrer"
-            className="text-blue-400 hover:underline"
+            className="text-white hover:underline underline-offset-4"
           >
             ECE WebTech 2026 Fall
           </a>{' '}
-          {"dispensé par les intervenants d'Adaltas à l'ECE Paris."}
+          dispensé par Adaltas à l&apos;ECE Paris.
         </p>
       </header>
 
-      {/* Équipe */}
-      <section className="space-y-6">
-        <h2 className="text-2xl font-bold text-white tracking-tight">{"L'Équipe du Projet"}</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {members.map((member) => (
+      {/* Cartes des membres */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-bold text-white tracking-tight">L&apos;Équipe du Projet</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {members.map((m) => (
             <div
-              key={member.name}
-              className="p-5 rounded-xl bg-slate-900/60 border border-slate-800 space-y-3 flex flex-col justify-between"
+              key={m.name}
+              className="bg-zinc-950 border border-zinc-800 rounded-lg p-5 flex flex-col justify-between space-y-4 hover:border-zinc-600 transition-colors"
             >
-              <div>
-                <h3 className="font-bold text-white text-base">{member.name}</h3>
-                <p className="text-xs text-blue-400 font-medium mt-0.5">{member.role}</p>
-                <p className="text-xs text-slate-400 mt-3 leading-relaxed">{member.tasks}</p>
+              <div className="space-y-2">
+                <div className="w-8 h-8 rounded-full bg-zinc-900 border border-zinc-800 text-white font-bold text-xs flex items-center justify-center">
+                  {m.name[0]}
+                </div>
+                <div>
+                  <h3 className="font-semibold text-white text-sm">{m.name}</h3>
+                  <div className="text-[11px] text-zinc-400 font-mono mt-0.5">{m.role}</div>
+                </div>
+                <p className="text-xs text-zinc-400 leading-relaxed pt-2 border-t border-zinc-900">
+                  {m.tasks}
+                </p>
               </div>
+
               <a
-                href={member.github}
+                href={m.github}
                 target="_blank"
                 rel="noreferrer"
-                className="text-xs font-semibold text-slate-300 hover:text-white inline-flex items-center gap-1 pt-2 border-t border-slate-800/80"
+                className="inline-flex items-center text-xs text-zinc-300 hover:text-white pt-2 font-mono"
               >
-                <span>GitHub →</span>
+                GitHub →
               </a>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Stack & Choix d'Architecture */}
-      <section className="space-y-6">
-        <h2 className="text-2xl font-bold text-white tracking-tight">{"Choix Techniques & Philosophie"}</h2>
-        <div className="p-6 rounded-xl bg-slate-900/50 border border-slate-800 space-y-4 text-sm text-slate-300 leading-relaxed">
+      {/* Stack Technique & Objectifs */}
+      <section className="space-y-4">
+        <h2 className="text-lg font-bold text-white tracking-tight">Stack Technique & Règle d&apos;Or</h2>
+        <div className="p-6 rounded-lg bg-zinc-950 border border-zinc-800 space-y-4 text-xs text-zinc-300 leading-relaxed">
           <p>
-            {"Notre consigne d'équipe a été : "}<strong>Zéro Overkill, Simplicité et Performance</strong>.
+            <strong className="text-white">Philosophie : Zéro Overkill.</strong> Aucune dépendance
+            superflue, aucun ORM complexe, pas de Redux. Nous utilisons du JavaScript moderne standard,
+            direct et compréhensible pour la soutenance orale.
           </p>
-          <ul className="list-disc list-inside space-y-2 text-slate-400">
-            <li>
-              <strong className="text-slate-200">JavaScript standard et lisible</strong> : Pas de sur-typage complexe ou d&apos;abstractions opaques pouvant ralentir l&apos;explication orale.
-            </li>
-            <li>
-              <strong className="text-slate-200">Next.js 15 App Router</strong> : Utilisation des Server Components pour le SEO et le bundle minimal, combiné aux Client Components ciblés.
-            </li>
-            <li>
-              <strong className="text-slate-200">PostgreSQL pur & Supabase RLS</strong> : Pas d&apos;ORM lourd (comme Prisma). Les requêtes SQL et politiques RLS garantissent la sécurité au niveau de la base de données.
-            </li>
-            <li>
-              <strong className="text-slate-200">Tailwind CSS 4</strong> : Moteur Oxide en Rust sans fichier de configuration JavaScript verbeux.
-            </li>
-          </ul>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 font-mono text-[11px]">
+            <div className="p-3 rounded bg-black border border-zinc-900">
+              <span className="text-white font-bold block">Next.js 15</span>
+              <span className="text-zinc-500">App Router</span>
+            </div>
+            <div className="p-3 rounded bg-black border border-zinc-900">
+              <span className="text-white font-bold block">Supabase</span>
+              <span className="text-zinc-500">PostgreSQL & Auth</span>
+            </div>
+            <div className="p-3 rounded bg-black border border-zinc-900">
+              <span className="text-white font-bold block">Tailwind CSS 4</span>
+              <span className="text-zinc-500">Design Épuré</span>
+            </div>
+            <div className="p-3 rounded bg-black border border-zinc-900">
+              <span className="text-white font-bold block">Vercel</span>
+              <span className="text-zinc-500">Hébergement Cloud</span>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Liens documentation */}
-      <section className="p-6 rounded-xl bg-slate-900 border border-slate-800 flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <h3 className="font-semibold text-white text-sm">Documentation Complète pour la Soutenance</h3>
-          <p className="text-xs text-slate-400">{"Consultez les fichiers d'architecture, de rendu et d'auth."}</p>
-        </div>
-        <div className="flex gap-2">
-          <Link
-            href="/articles"
-            className="px-4 py-2 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-colors"
-          >
-            Voir les Articles
-          </Link>
-          <Link
-            href="/contact"
-            className="px-4 py-2 rounded-lg text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
-          >
-            Nous contacter
-          </Link>
-        </div>
-      </section>
+      {/* Call to action */}
+      <div className="pt-4 border-t border-zinc-800 flex items-center justify-between">
+        <Link href="/articles" className="text-xs text-zinc-400 hover:text-white transition-colors">
+          ← Explorer les articles
+        </Link>
+        <Link
+          href="/contact"
+          className="px-4 py-2 rounded-md text-xs font-semibold bg-white text-black hover:bg-zinc-200 transition-colors"
+        >
+          Nous contacter
+        </Link>
+      </div>
     </div>
   );
 }

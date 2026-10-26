@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 
-// Auto-close mobile drawer on route navigation
 export default function Navbar() {
   const [user, setUser] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -30,6 +29,11 @@ export default function Navbar() {
     };
   }, []);
 
+  // Fermer le menu mobile lors d'un changement d'URL
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
   const handleSignOut = async () => {
     const supabase = createClient();
     await supabase.auth.signOut();
@@ -46,33 +50,31 @@ export default function Navbar() {
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+    <header className="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-zinc-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo */}
+          {/* Logo Minimaliste */}
           <div className="flex items-center space-x-3">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <span className="w-9 h-9 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-blue-500/20 group-hover:scale-105 transition-transform">
+            <Link href="/" className="flex items-center space-x-2.5 group">
+              <span className="w-7 h-7 rounded bg-white text-black flex items-center justify-center font-bold text-sm transition-transform group-hover:scale-105">
                 ⚡
               </span>
-              <span className="text-xl font-bold tracking-tight text-white group-hover:text-blue-400 transition-colors">
-                Dev<span className="text-blue-500">Board</span>
+              <span className="text-base font-bold tracking-tight text-white group-hover:text-zinc-300 transition-colors">
+                DevBoard
               </span>
             </Link>
           </div>
 
-          {/* Navigation Desktop */}
-          <nav className="hidden md:flex items-center space-x-1">
+          {/* Navigation Bureau */}
+          <nav className="hidden md:flex items-center space-x-6 text-sm">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'text-white bg-slate-800'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800/60'
+                  className={`transition-colors ${
+                    isActive ? 'text-white font-medium' : 'text-zinc-400 hover:text-white'
                   }`}
                 >
                   {link.label}
@@ -81,65 +83,60 @@ export default function Navbar() {
             })}
           </nav>
 
-          {/* Auth Actions Desktop */}
+          {/* Actions Utilisateur */}
           <div className="hidden md:flex items-center space-x-3">
+            <Link
+              href="/articles/new"
+              className="px-3.5 py-1.5 rounded-md text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-100 border border-zinc-700 transition-colors"
+            >
+              + Écrire
+            </Link>
+
             {user ? (
               <div className="flex items-center space-x-3">
                 <Link
-                  href="/articles/new"
-                  className="inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-sm transition-colors"
-                >
-                  <span className="mr-1.5 text-sm">+</span> Publier
-                </Link>
-                <Link
                   href="/profile"
-                  className="flex items-center space-x-2 text-sm text-slate-300 hover:text-white px-2.5 py-1.5 rounded-md hover:bg-slate-800 transition-colors"
+                  className="flex items-center space-x-2 text-xs text-zinc-300 hover:text-white border border-zinc-800 px-3 py-1.5 rounded-md bg-zinc-950 transition-colors"
                 >
-                  <span className="w-7 h-7 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold text-blue-400">
+                  <span className="w-5 h-5 rounded-full bg-white text-black text-[10px] font-bold flex items-center justify-center">
                     {(user.user_metadata?.full_name || user.email || 'U')[0].toUpperCase()}
                   </span>
-                  <span className="max-w-[120px] truncate text-xs font-medium">
+                  <span className="max-w-[120px] truncate">
                     {user.user_metadata?.full_name || user.email.split('@')[0]}
                   </span>
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="text-xs text-slate-400 hover:text-red-400 px-2 py-1 transition-colors"
+                  className="text-xs text-zinc-400 hover:text-white transition-colors"
                 >
                   Déconnexion
                 </button>
               </div>
             ) : (
-              <div className="flex items-center space-x-2">
-                <Link
-                  href="/login"
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
-                >
-                  Connexion
-                </Link>
-                <Link
-                  href="/login?tab=signup"
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 hover:bg-blue-500 text-white shadow-md shadow-blue-500/20 transition-all"
-                >
-                  {"S'inscrire"}
-                </Link>
-              </div>
+              <Link
+                href="/login"
+                className="px-3.5 py-1.5 rounded-md text-xs font-semibold bg-white hover:bg-zinc-200 text-black transition-colors"
+              >
+                Connexion
+              </Link>
             )}
           </div>
 
           {/* Bouton Hamburger Mobile */}
-          <div className="flex md:hidden items-center">
+          <div className="flex md:hidden">
             <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               type="button"
-              className="p-2 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 focus:outline-none"
-              aria-label="Toggle menu"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="text-zinc-400 hover:text-white p-2 rounded-md"
+              aria-label="Ouvrir le menu"
             >
-              {mobileMenuOpen ? (
-                <span className="text-xl font-bold">✕</span>
-              ) : (
-                <span className="text-xl font-bold">☰</span>
-              )}
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {mobileMenuOpen ? (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                ) : (
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                )}
+              </svg>
             </button>
           </div>
         </div>
@@ -147,61 +144,49 @@ export default function Navbar() {
 
       {/* Menu Déroulant Mobile */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-b border-slate-800 bg-slate-900 px-4 pt-2 pb-4 space-y-1">
-          {navLinks.map((link) => (
+        <div className="md:hidden border-b border-zinc-800 bg-black px-4 pt-2 pb-6 space-y-3">
+          <div className="space-y-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="block px-3 py-2 rounded-md text-sm text-zinc-300 hover:bg-zinc-900 hover:text-white"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </div>
+
+          <div className="pt-3 border-t border-zinc-800 flex flex-col gap-2">
             <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800"
+              href="/articles/new"
+              className="block text-center py-2 rounded-md text-xs font-medium bg-zinc-900 border border-zinc-700 text-zinc-100"
             >
-              {link.label}
+              + Rédiger un article
             </Link>
-          ))}
-          <div className="pt-3 border-t border-slate-800 flex flex-col space-y-2">
+
             {user ? (
               <>
                 <Link
-                  href="/articles/new"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2 rounded-md text-sm font-semibold bg-blue-600 text-white"
-                >
-                  + Rédiger un article
-                </Link>
-                <Link
                   href="/profile"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="w-full text-center py-2 rounded-md text-sm font-medium text-slate-300 hover:bg-slate-800"
+                  className="block text-center py-2 rounded-md text-xs font-medium border border-zinc-800 bg-zinc-950 text-white"
                 >
-                  Mon Profil ({user.email})
+                  Mon profil ({user.email})
                 </Link>
                 <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleSignOut();
-                  }}
-                  className="w-full text-center py-2 rounded-md text-sm font-medium text-red-400 hover:bg-slate-800"
+                  onClick={handleSignOut}
+                  className="w-full text-center py-2 rounded-md text-xs text-zinc-400 hover:text-white"
                 >
-                  Déconnexion
+                  Se déconnecter
                 </button>
               </>
             ) : (
-              <div className="grid grid-cols-2 gap-2">
-                <Link
-                  href="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-center py-2 rounded-md text-sm font-medium text-slate-300 bg-slate-800"
-                >
-                  Connexion
-                </Link>
-                <Link
-                  href="/login?tab=signup"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-center py-2 rounded-md text-sm font-semibold bg-blue-600 text-white"
-                >
-                  {"S'inscrire"}
-                </Link>
-              </div>
+              <Link
+                href="/login"
+                className="block text-center py-2 rounded-md text-xs font-semibold bg-white text-black"
+              >
+                Se connecter
+              </Link>
             )}
           </div>
         </div>

@@ -7,7 +7,7 @@ export const metadata = {
   description:
     'Plateforme d échange et de publication d articles tech pour développeurs. Projet final du cours ECE WebTech 2026 Fall (Next.js 15, Supabase, Tailwind CSS 4).',
   keywords: ['Next.js 15', 'Supabase', 'Tailwind CSS 4', 'PostgreSQL', 'WebTech', 'ECE Paris'],
-  authors: [{ name: 'Yvan FOCSA' }, { name: 'Emir Ben Hassen' }, { name: 'Kardiatou TOURE' }],
+  authors: [{ name: 'Yvan FOCSA' }, { name: 'Kardiatou TOURE' }, { name: 'Emir Ben Hassen' }],
   openGraph: {
     title: 'DevBoard | Partage d Articles Tech & Veille Développeur',
     description: 'Plateforme d échange et de partage d articles tech pour développeurs (ECE WebTech 2026 Fall).',
@@ -23,7 +23,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: '#090d16',
+  themeColor: '#000000',
   width: 'device-width',
   initialScale: 1,
 };
@@ -31,7 +31,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="fr" className="dark">
-      <body className="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-blue-600 selection:text-white">
+      <body className="bg-black text-zinc-100 min-h-screen flex flex-col selection:bg-white selection:text-black">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />

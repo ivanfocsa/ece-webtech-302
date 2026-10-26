@@ -2,37 +2,37 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="mt-auto border-t border-slate-800 bg-slate-950/80 text-slate-400">
+    <footer className="mt-auto border-t border-zinc-800 bg-black text-zinc-400">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Pitch */}
           <div className="md:col-span-2 space-y-3">
-            <div className="flex items-center space-x-2">
-              <span className="w-7 h-7 rounded bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+            <div className="flex items-center space-x-2.5">
+              <span className="w-6 h-6 rounded bg-white text-black flex items-center justify-center font-bold text-xs">
                 ⚡
               </span>
-              <span className="text-lg font-bold text-white">DevBoard</span>
+              <span className="text-base font-bold text-white tracking-tight">DevBoard</span>
             </div>
-            <p className="text-sm text-slate-400 max-w-md">
-              Plateforme collaborative d&apos;échange et de partage d&apos;articles tech conçue pour le cours{' '}
+            <p className="text-xs text-zinc-400 max-w-md leading-relaxed">
+              Plateforme collaborative de veille technologique développée pour le cours{' '}
               <a
                 href="https://github.com/adaltas/ece-webtech-2026-fall"
                 target="_blank"
                 rel="noreferrer"
-                className="text-blue-400 hover:underline"
+                className="text-white hover:underline underline-offset-4"
               >
                 ECE WebTech 2026 Fall
               </a>
-              . Architecture moderne Next.js 15, PostgreSQL & Tailwind CSS 4.
+              . Architecture épurée Next.js 15, PostgreSQL & Tailwind CSS 4.
             </p>
           </div>
 
           {/* Navigation */}
           <div>
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">
+            <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">
               Navigation
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-xs">
               <li>
                 <Link href="/articles" className="hover:text-white transition-colors">
                   Explorer les articles
@@ -58,10 +58,10 @@ export default function Footer() {
 
           {/* Équipe */}
           <div>
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">
+            <h3 className="text-xs font-semibold text-zinc-300 uppercase tracking-wider mb-3">
               Auteurs
             </h3>
-            <ul className="space-y-2 text-sm">
+            <ul className="space-y-2 text-xs">
               <li>
                 <a
                   href="https://github.com/ivanfocsa"
@@ -74,37 +74,37 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="https://github.com/Emirates917"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="hover:text-white transition-colors"
-                >
-                  Emir Ben Hassen (Backend)
-                </a>
-              </li>
-              <li>
-                <a
                   href="https://github.com/Kardiatou0"
                   target="_blank"
                   rel="noreferrer"
                   className="hover:text-white transition-colors"
                 >
-                  Kardiatou TOURE (Frontend)
+                  Kardiatou TOURE (Backend)
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/Emirates917"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="hover:text-white transition-colors"
+                >
+                  Emir Ben Hassen (Frontend)
                 </a>
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-8 pt-6 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
-          <p>© 2026 DevBoard. Tous droits réservés.</p>
-          <div className="flex space-x-4 mt-3 sm:mt-0">
+        <div className="mt-8 pt-6 border-t border-zinc-900 flex flex-col sm:flex-row items-center justify-between text-[11px] text-zinc-500">
+          <p>© 2026 DevBoard. Minimalist & Open Source.</p>
+          <div className="flex space-x-3 mt-3 sm:mt-0 font-mono">
             <span>Next.js 15</span>
-            <span>•</span>
+            <span>/</span>
             <span>Supabase</span>
-            <span>•</span>
-            <span>Tailwind CSS 4</span>
-            <span>•</span>
+            <span>/</span>
+            <span>Tailwind 4</span>
+            <span>/</span>
             <span>Vercel</span>
           </div>
         </div>
