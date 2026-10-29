@@ -1,88 +1,58 @@
 import Link from 'next/link';
 
+// SSG : aucune donnée dynamique, la page est générée une seule fois au build
+const members = [
+  { name: 'Yvan FOCSA', role: 'Lead, architecture, auth et déploiement', github: 'https://github.com/ivanfocsa' },
+  { name: 'Kardiatou TOURE', role: 'Base de données, RLS et CRUD articles', github: 'https://github.com/Kardiatou0' },
+  { name: 'Emir Ben Hassen', role: 'Interface Tailwind, composants et météo', github: 'https://github.com/Emirates917' },
+];
+
+const renderings = [
+  { mode: 'SSG', page: '/about', href: '/about' },
+  { mode: 'ISR (60 s)', page: '/', href: '/' },
+  { mode: 'SSR', page: '/articles, /profile', href: '/articles' },
+  { mode: 'CSR', page: '/contact, /login, /articles/new', href: '/contact' },
+  { mode: 'SSG dynamique', page: '/articles/[id]', href: '/articles' },
+];
+
 export default function AboutPage() {
-  const members = [
-    {
-      name: 'Yvan FOCSA',
-      role: 'Lead & Architecture',
-      github: 'https://github.com/ivanfocsa',
-      tasks:
-        'Configuration Next.js 15, authentification GitHub et par email, middleware de protection des routes et déploiement.',
-    },
-    {
-      name: 'Kardiatou TOURE',
-      role: 'Backend & Base de données',
-      github: 'https://github.com/Kardiatou0',
-      tasks:
-        'Création des tables PostgreSQL sur Supabase, politiques de sécurité Row Level Security (RLS) et requêtes des articles.',
-    },
-    {
-      name: 'Emir Ben Hassen',
-      role: 'Frontend & Intégration',
-      github: 'https://github.com/Emirates917',
-      tasks:
-        'Mise en page avec Tailwind CSS, barre de navigation, filtrage par catégorie, widget météo et formulaire de contact.',
-    },
-  ];
-
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-10 space-y-10">
-      <header className="space-y-2 border-b border-zinc-800 pb-6">
-        <span className="text-[11px] font-mono text-zinc-500">SSG (Static Site Generation)</span>
-        <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">À propos du projet</h1>
-        <p className="text-zinc-400 text-sm leading-relaxed">
-          DevBoard est un projet développé pour le cours ECE WebTech. Le but est de créer un site de partage d&apos;articles techniques avec authentification, droits d&apos;accès et rendu dynamique.
+    <div className="max-w-2xl mx-auto px-4 py-10 space-y-12">
+      <div className="space-y-3">
+        <span className="badge">SSG</span>
+        <h1>À propos</h1>
+        <p className="text-zinc-400">
+          DevBoard est notre projet du cours WebTech à l&apos;ECE. Un site simple de partage d&apos;articles
+          qui montre les différents modes de rendu de Next.js 15, avec Supabase pour la base de données
+          et l&apos;authentification.
         </p>
-      </header>
+      </div>
 
-      {/* Membres de l'équipe */}
       <section className="space-y-4">
-        <h2 className="text-base font-semibold text-white">Équipe du projet</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {members.map((m) => (
-            <div
-              key={m.name}
-              className="bg-zinc-950 border border-zinc-800 rounded-lg p-5 flex flex-col justify-between space-y-3"
-            >
-              <div className="space-y-1.5">
-                <h3 className="font-semibold text-white text-sm">{m.name}</h3>
-                <div className="text-xs text-zinc-400 font-mono">{m.role}</div>
-                <p className="text-xs text-zinc-400 leading-relaxed pt-2 border-t border-zinc-900">
-                  {m.tasks}
-                </p>
-              </div>
-
-              <a
-                href={m.github}
-                target="_blank"
-                rel="noreferrer"
-                className="text-xs text-zinc-400 hover:text-white transition-colors"
-              >
-                Voir GitHub →
-              </a>
-            </div>
+        <h2>Modes de rendu</h2>
+        <div className="card divide-y divide-zinc-900">
+          {renderings.map((r) => (
+            <Link key={r.mode} href={r.href} className="flex justify-between px-4 py-3 text-sm hover:bg-zinc-900/50">
+              <span className="text-white">{r.mode}</span>
+              <span className="font-mono text-zinc-500">{r.page}</span>
+            </Link>
           ))}
         </div>
       </section>
 
-      {/* Technologies utilisées */}
-      <section className="space-y-3">
-        <h2 className="text-base font-semibold text-white">Stack technique</h2>
-        <div className="p-4 rounded-lg bg-zinc-950 border border-zinc-800 space-y-2 text-xs text-zinc-400">
-          <p>
-            L&apos;application est construite avec Next.js 15 en JavaScript standard. La persistance des données et la gestion des sessions utilisateurs reposent sur Supabase (PostgreSQL et Auth). L&apos;interface utilise Tailwind CSS 4.
-          </p>
+      <section className="space-y-4">
+        <h2>Équipe</h2>
+        <div className="space-y-3">
+          {members.map((m) => (
+            <a key={m.name} href={m.github} className="card p-4 flex justify-between gap-4 text-sm hover:border-zinc-600 transition-colors">
+              <span className="text-white">{m.name}</span>
+              <span className="text-zinc-500 text-right">{m.role}</span>
+            </a>
+          ))}
         </div>
       </section>
 
-      <div className="pt-4 border-t border-zinc-800 flex items-center justify-between text-xs">
-        <Link href="/articles" className="text-zinc-400 hover:text-white transition-colors">
-          ← Retour aux articles
-        </Link>
-        <Link href="/contact" className="text-zinc-400 hover:text-white transition-colors">
-          Nous contacter
-        </Link>
-      </div>
+      <p className="text-sm text-zinc-500">Next.js 15, React 19, Supabase (PostgreSQL, Auth, RLS), Tailwind CSS 4, Vercel.</p>
     </div>
   );
 }

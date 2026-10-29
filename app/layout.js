@@ -3,35 +3,19 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
 export const metadata = {
-  title: 'DevBoard | Partage d Articles Tech & Veille Développeur',
-  description:
-    'Plateforme d échange et de publication d articles tech pour développeurs. Projet final du cours ECE WebTech 2026 Fall (Next.js 15, Supabase, Tailwind CSS 4).',
-  keywords: ['Next.js 15', 'Supabase', 'Tailwind CSS 4', 'PostgreSQL', 'WebTech', 'ECE Paris'],
+  title: 'DevBoard',
+  description: 'Partage d’articles techniques entre développeurs. Projet ECE WebTech 2026 (Next.js 15, Supabase, Tailwind CSS 4).',
   authors: [{ name: 'Yvan FOCSA' }, { name: 'Kardiatou TOURE' }, { name: 'Emir Ben Hassen' }],
-  openGraph: {
-    title: 'DevBoard | Partage d Articles Tech & Veille Développeur',
-    description: 'Plateforme d échange et de partage d articles tech pour développeurs (ECE WebTech 2026 Fall).',
-    siteName: 'DevBoard',
-    locale: 'fr_FR',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'DevBoard',
-    description: 'Plateforme tech collaborative pour développeurs',
-  },
 };
 
 export const viewport = {
   themeColor: '#000000',
-  width: 'device-width',
-  initialScale: 1,
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="fr" className="dark">
-      <body className="bg-black text-zinc-100 min-h-screen flex flex-col selection:bg-white selection:text-black">
+    <html lang="fr">
+      <body className="min-h-screen flex flex-col selection:bg-white selection:text-black">
         <Navbar />
         <main className="flex-1">{children}</main>
         <Footer />
