@@ -2,11 +2,12 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { safeRedirectPath } from '@/lib/safe-redirect';
 import { createClient } from '@/lib/supabase/client';
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const next = searchParams.get('next') || '/profile';
+  const next = safeRedirectPath(searchParams.get('next'));
   const initialTab = searchParams.get('tab') === 'signup' ? 'signup' : 'signin';
 
   const [tab, setTab] = useState(initialTab);
@@ -14,14 +15,23 @@ function LoginForm() {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState(searchParams.get('error') === 'auth_callback' ? 'La connexion a échoué. Veuillez réessayer.' : '');
   const [successMsg, setSuccessMsg] = useState('');
 
   const router = useRouter();
 
+  const requireConfiguration = () => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+    if (!url || !key || /placeholder|your-project/.test(url) || key === 'placeholder-anon-key') {
+      throw new Error('La connexion est temporairement indisponible. Veuillez réessayer plus tard.');
+    }
+  };
+
   const handleOAuthGitHub = async () => {
     setErrorMsg('');
     try {
+      requireConfiguration();
       const supabase = createClient();
       const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}`;
 
@@ -45,6 +55,7 @@ function LoginForm() {
     setSuccessMsg('');
 
     try {
+      requireConfiguration();
       const supabase = createClient();
 
       if (tab === 'signin') {
