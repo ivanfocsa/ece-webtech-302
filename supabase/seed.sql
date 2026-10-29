@@ -1,62 +1,75 @@
 -- ==============================================================================
--- DevBoard - Données de test (Seed) pour démonstration locale et Vercel
+-- DevBoard - Articles d'exemple
+-- À lancer une fois dans Supabase (SQL Editor), après schema.sql.
+-- Les articles sont rattachés au premier compte créé (celui de Yvan),
+-- car user_id doit exister dans auth.users. author_name sert juste à l'affichage.
 -- ==============================================================================
 
--- Insertion d'articles techniques réalistes
-insert into public.articles (id, title, slug, category, summary, content, user_id, author_name, created_at)
-values
+with owner as (
+  select id from auth.users order by created_at limit 1
+)
+insert into public.articles (title, slug, category, summary, content, user_id, author_name, created_at)
+select a.title, a.slug, a.category, a.summary, a.content, owner.id, a.author_name, now() - a.age
+from owner, (values
   (
-    'a1111111-1111-1111-1111-111111111111',
-    'Comprendre Next.js 15 et le nouveau paradigme de cache',
-    'comprendre-nextjs-15-nouveau-cache',
+    'Les modes de rendu de Next.js en bref',
+    'modes-de-rendu-nextjs',
     'Frontend',
-    'Analyse des changements majeurs apportés par Next.js 15 : fin du cache automatique par défaut et gestion asynchrone des paramètres.',
-    '## Introduction\n\nNext.js 15 introduit une rupture majeure par rapport à la version 14 : **les requêtes fetch et les routes ne sont plus mises en cache par défaut**.\n\nCette décision résout des mois de confusion où les développeurs devaient systématiquement spécifier `cache: no-store`.\n\n### 1. searchParams et params asynchrones\n\nDans Next.js 15, `params` et `searchParams` deviennent des Promises :\n\n```javascript\nexport default async function Page({ params, searchParams }) {\n  const { id } = await params;\n  const { query } = (await searchParams) || {};\n  return <div>Article {id} - {query}</div>;\n}\n```\n\n### 2. Le support officiel de React 19\n\nNext.js 15 apporte une intégration complète avec React 19, incluant les Server Actions stables et les hooks d action (`useActionState`, `useOptimistic`).\n\n### Conclusion\n\nUne version plus prévisible, plus proche des standards du web, et parfaitement adaptée aux architectures serverless modernes.',
-    '00000000-0000-0000-0000-000000000001',
+    'SSG, ISR, SSR et CSR : ce que fait chacun et quand l''utiliser.',
+    'SSG génère la page une fois au build. ISR fait pareil mais régénère la page après un délai, par exemple 60 secondes. SSR construit la page à chaque requête, utile quand le contenu dépend de l''utilisateur. CSR laisse le navigateur faire le rendu, pratique pour les formulaires et les boutons interactifs.
+
+Sur DevBoard, chaque page affiche un badge avec son mode de rendu.',
     'Yvan FOCSA',
-    now() - interval '14 days'
+    interval '12 days'
   ),
   (
-    'a2222222-2222-2222-2222-222222222222',
-    'Supabase vs Firebase : pourquoi PostgreSQL change la donne',
-    'supabase-vs-firebase-guide-postgresql',
-    'Backend',
-    'Comparatif technique approfondi entre Supabase et Firebase pour les applications web modernes nécessitant des relations complexes.',
-    '## Le dilemme du BaaS moderne\n\nFirebase a dominé le marché pendant une décennie avec son modèle document NoSQL (Firestore). Pourtant, l essor de Supabase prouve la supériorité durable du modèle relationnel SQL.\n\n### Les avantages clés de Supabase :\n\n- **PostgreSQL pur** : Pas de dialecte propriétaire, accès direct aux triggers, fonctions PL/pgSQL et extensions.\n- **Row Level Security (RLS)** : Sécurisation granulaire directement au niveau de la base plutôt que dans des règles applicatives séparées.\n- **Pas de vendor lock-in** : Supabase est 100% open-source et auto-hébergeable.\n\n```sql\ncreate policy "Auteurs seulement" on articles\n  for update using (auth.uid() = user_id);\n```\n\nPour un projet moderne comme DevBoard, Supabase s impose comme le choix naturel.',
-    '00000000-0000-0000-0000-000000000002',
-    'Emir Ben Hassen',
-    now() - interval '10 days'
-  ),
-  (
-    'a3333333-3333-3333-3333-333333333333',
-    'Pourquoi Tailwind CSS 4 réinvente le CSS utilitaire',
-    'pourquoi-tailwind-css-4-reinvente-css',
-    'Frontend',
-    'Retour d expérience sur Tailwind CSS 4 : disparition de tailwind.config.js, moteur Oxide en Rust et performances décuplées.',
-    '## Un moteur entièrement réécrit en Rust\n\nTailwind CSS 4 marque l évolution la plus importante du framework depuis sa création. Fini le fichier JavaScript `tailwind.config.js` lourd et complexe : toute la configuration réside désormais directement dans le CSS grâce à `@theme`.\n\n### Ce qui change concrètement :\n\n1. **Compilation instantanée** : Grâce au moteur Oxide écrit en Rust, le build est jusqu à 10x plus rapide.\n2. **Import unique** : Une seule ligne `@import "tailwindcss";` suffit à initialiser l ensemble des styles.\n3. **Modern CSS natif** : Exploitation poussée de `@property`, CSS nesting et des cascades layers standardisées.\n\nL expérience de développement sur DevBoard a été drastiquement simplifiée par cette refonte.',
-    '00000000-0000-0000-0000-000000000003',
-    'Kardiatou TOURE',
-    now() - interval '7 days'
-  ),
-  (
-    'a4444444-4444-4444-4444-444444444444',
-    'Sécuriser vos APIs avec Row Level Security (RLS) dans PostgreSQL',
-    'securiser-apis-row-level-security-postgresql',
+    'Protéger des routes avec le middleware',
+    'proteger-routes-middleware',
     'Sécurité',
-    'Comment déléguer l autorisation d accès aux données directement au moteur de base de données PostgreSQL sans failles.',
-    '## Le principe de la sécurité au plus bas niveau\n\nDans une architecture web classique, la vérification des permissions est souvent dispersée dans des middlewares ou des contrôleurs d API. Un oubli suffit pour exposer une ressource.\n\nAvec **PostgreSQL Row Level Security (RLS)**, chaque ligne de table applique des prédicats booléens inviolables, quel que soit le client exécutant la requête.\n\n### Démonstration pratique :\n\n```sql\nalter table public.articles enable row level security;\n\ncreate policy "Lecture publique"\n  on public.articles for select\n  using (true);\n\ncreate policy "Modification par le propriétaire"\n  on public.articles for update\n  using (auth.uid() = user_id);\n```\n\nMême si un utilisateur malveillant modifie les requêtes frontend, PostgreSQL rejette la transaction si `auth.uid() != user_id`.',
-    '00000000-0000-0000-0000-000000000002',
-    'Emir Ben Hassen',
-    now() - interval '4 days'
+    'Comment le middleware vérifie la session avant d''afficher une page privée.',
+    'Le middleware tourne avant chaque requête. Il lit la session Supabase dans les cookies. Si la page demandée est privée (/profile, /articles/new) et que personne n''est connecté, il redirige vers /login.
+
+Avantage : la vérification est faite côté serveur, la page privée n''est jamais envoyée au navigateur.',
+    'Yvan FOCSA',
+    interval '9 days'
   ),
   (
-    'a5555555-5555-5555-5555-555555555555',
-    'Architecture Web Moderne : Server vs Client Components décryptés',
-    'architecture-web-moderne-server-client-components',
+    'Row Level Security sur Supabase',
+    'row-level-security-supabase',
+    'Backend',
+    'Laisser PostgreSQL décider qui peut lire ou modifier une ligne.',
+    'Avec RLS, chaque table a des règles. Sur DevBoard, tout le monde peut lire les articles, mais seul l''auteur peut les modifier ou les supprimer. La règle compare auth.uid() avec la colonne user_id.
+
+Même si quelqu''un appelle l''API directement, la base refuse la requête.',
+    'Kardiatou TOURE',
+    interval '7 days'
+  ),
+  (
+    'Modéliser articles, likes et commentaires',
+    'modeliser-articles-likes-commentaires',
     'Architecture',
-    'Guide pragmatique pour structurer vos applications Next.js sans tomber dans le piège du "tout client".',
-    '## L équilibre Server vs Client\n\nL App Router de Next.js repose sur un paradigme simple mais souvent mal compris : **tous les composants sont des Server Components par défaut**.\n\n### Règle d or DevBoard :\n\n- **Server Component** : Lecture des données dans Supabase, SEO, génération HTML statique (SSG/ISR), protection des secrets d API.\n- **Client Component (`"use client"`)** : Interactivité utilisateur (bouton Like, formulaire de commentaire réactif, menu hamburger responsive).\n\nEn découpant nos composants à la racine des interactions, nous préservons un bundle JavaScript minimal (First Load JS ~103 kB).',
-    '00000000-0000-0000-0000-000000000001',
-    'Yvan FOCSA',
-    now() - interval '2 days'
-  );
+    'Quatre tables simples et des clés étrangères bien posées.',
+    'Les tables comments et likes pointent vers articles avec on delete cascade : supprimer un article supprime aussi ses likes et commentaires. Une contrainte unique sur (article_id, user_id) empêche de liker deux fois le même article.',
+    'Kardiatou TOURE',
+    interval '5 days'
+  ),
+  (
+    'Tailwind CSS 4 sans fichier de config',
+    'tailwind-css-4-sans-config',
+    'Frontend',
+    'Tout se fait dans le CSS avec @import et @apply.',
+    'Avec Tailwind 4, plus besoin de tailwind.config.js. On importe Tailwind dans globals.css et on définit quelques classes communes (boutons, champs, cartes) avec @apply. Le reste se fait directement dans les composants.',
+    'Emir Ben Hassen',
+    interval '3 days'
+  ),
+  (
+    'Appeler une API externe avec ISR',
+    'api-externe-isr-open-meteo',
+    'DevOps',
+    'Le widget météo de l''accueil utilise Open-Meteo, sans clé d''API.',
+    'La météo de Paris est récupérée côté serveur avec fetch et next: { revalidate: 300 }. La réponse est mise en cache, donc l''API n''est appelée qu''une fois toutes les 5 minutes, même avec beaucoup de visiteurs.',
+    'Emir Ben Hassen',
+    interval '1 day'
+  )
+) as a(title, slug, category, summary, content, author_name, age)
+on conflict (slug) do nothing;
