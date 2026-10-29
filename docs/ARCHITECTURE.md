@@ -29,7 +29,7 @@ ece-webtech-302/
 │   ├── contact/
 │   │   └── page.js            # [Client - CSR] Formulaire de prise de contact
 │   ├── login/
-│   │   └── page.js            # [Client - CSR] Interface d'authentification Email & OAuth
+│   │   └── page.js            # [Client - CSR] Écran d'accueil et de connexion (GitHub ou email)
 │   └── auth/
 │       └── callback/
 │           └── route.js       # [Route Handler] Échange du code temporaire OAuth GitHub
@@ -50,9 +50,8 @@ Pour optimiser les performances (Core Web Vitals) et minimiser la charge JavaScr
             ▼                                                     ▼
 ┌───────────────────────────┐                         ┌───────────────────────┐
 │     Navbar (Client)       │                         │   Footer (Server)     │
-│ - Menu hamburger mobile   │                         │ - Liens & crédits     │
+│ - Menu mobile             │                         │ - Liens & crédits     │
 │ - Statut d'authentification│                         └───────────────────────┘
-│ - Widget météo Paris      │
 └───────────────────────────┘
 ```
 
@@ -69,7 +68,8 @@ Pour optimiser les performances (Core Web Vitals) et minimiser la charge JavaScr
 - **`components/CommentSection.js`** : Gère la saisie textuelle, l'ajout instantané de commentaire dans la liste et la suppression.
 - **`components/DeleteArticleButton.js`** : Gère la fenêtre de confirmation et déclenche la redirection après suppression.
 - **`app/contact/page.js`** : Contrôle la saisie des champs en temps réel et affiche les notifications de succès/erreur.
-- **`app/login/page.js`** : Alterne entre les onglets "Connexion" et "Inscription", communique avec GitHub OAuth et Supabase Auth.
+- **`app/login/page.js`** : Écran affiché à la première visite. Bouton GitHub en premier, email en option, ou bouton "Continuer sans compte".
+- **`components/ArticleForm.js`** : Formulaire unique utilisé pour créer et modifier un article.
 
 ---
 
