@@ -42,3 +42,28 @@ test('redirect only accepts internal destinations', async () => {
   for(const input of ['https://evil.example','//evil.example','/\\evil.example','javascript:alert(1)','/\nevil.example',null]) assert.equal(safeRedirectPath(input),'/profile');
   assert.equal(safeRedirectPath('/articles?q=React'),'/articles?q=React');
 });
+
+function callback(exchange) {
+  const context = { URL, NextResponse: { redirect: (url) => url.toString() },
+    safeRedirectPath: (path, fallback = '/') => typeof path === 'string' && path.startsWith('/') && !path.startsWith('//') ? path : fallback,
+    createClient: async () => ({auth: {exchangeCodeForSession: exchange}}) };
+  vm.createContext(context);
+  vm.runInContext(fs.readFileSync('app/auth/callback/route.js','utf8').replace(/^import .*;\r?\n/gm,'').replace(/export /g,''), context);
+  return (query = '') => context.GET({url: 'http://localhost:3001/auth/callback' + query});
+}
+test('direct callback opens login without false error', async () => {
+  const result = new URL(await callback(() => {throw new Error('must not exchange');})());
+  assert.equal(result.pathname, '/login'); assert.equal(result.searchParams.has('error'), false);
+});
+test('provider denial is shown as a login error', async () => {
+  const result = new URL(await callback(() => {})('?error=access_denied'));
+  assert.equal(result.searchParams.get('error'), 'auth_callback');
+});
+test('session exchange failure does not open profile', async () => {
+  const result = new URL(await callback(async () => ({error: new Error('expired code')}))('?code=test&next=/profile'));
+  assert.equal(result.pathname, '/login'); assert.equal(result.searchParams.get('error'), 'auth_callback');
+});
+test('successful exchange returns to requested internal page', async () => {
+  const result = new URL(await callback(async () => ({error: null}))('?code=test&next=/articles/new'));
+  assert.equal(result.pathname, '/articles/new');
+});

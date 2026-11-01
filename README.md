@@ -70,7 +70,7 @@ Copiez `.env.example` dans `.env.local`, puis renseignez l'URL du projet et la c
 Le fichier `.env.local` est ignore par Git et ne doit pas etre publie.
 Dans Supabase Auth, autorisez `http://localhost:3001/auth/callback` (ou le port local utilise) parmi les URL de redirection. Le fournisseur GitHub doit etre configure dans Supabase Auth pour utiliser la connexion GitHub.
 Apres un changement de variables, reconstruisez et redemarrez le serveur de production, ou redemarrez le serveur de developpement.
-Sans configuration, la lecture des articles utilise les donnees de demonstration ; la connexion n'est pas active.
+Depuis la suppression du mode demonstration, les articles proviennent de Supabase. Sans configuration valide, la connexion et les operations sur les donnees ne sont pas disponibles.
 
 ## Corrections de securite pour une base existante
 
@@ -83,3 +83,8 @@ Modifier le fichier SQL dans Git ne modifie pas automatiquement la base de produ
 - `npm run build` : compilation de production.
 - `supabase/tests/rls_test.sql` : test des permissions, de l'unicite des likes, de la confidentialite des contacts et de la cascade. A executer dans Supabase avec deux comptes existants ; les donnees de test sont annulees par une transaction.
 Les tests locaux ne remplacent pas un essai complet avec deux comptes sur la base effectivement deployee.
+
+
+## Etat de la validation
+
+Les resultats detailles et leurs limites sont disponibles dans [docs/VALIDATION.md](./docs/VALIDATION.md). Les tests locaux, les essais sur le site de production et les controles restant a executer dans Supabase y sont distingues.
