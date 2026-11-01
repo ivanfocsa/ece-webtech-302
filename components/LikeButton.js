@@ -82,7 +82,7 @@ export default function LikeButton({ articleId, initialCount = 0 }) {
       <button
         onClick={handleLike}
         disabled={loading || !ready}
-        className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md text-xs font-medium border transition-colors ${
+        className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm border transition-colors ${
           hasLiked
             ? 'bg-white text-black border-white'
             : 'bg-zinc-950 border-zinc-800 text-zinc-300 hover:border-zinc-500 hover:text-white'

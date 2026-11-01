@@ -1,99 +1,66 @@
 @import "tailwindcss";
 
 @layer base {
-  :root {
-    --background: #000000;
-    --surface: #09090b;
-    --surface-card: #0a0a0a;
-    --surface-hover: #18181b;
-    --border: #27272a;
-    --primary: #ffffff;
-    --primary-hover: #e4e4e7;
-    --accent: #a1a1aa;
-    --text-main: #f4f4f5;
-    --text-muted: #71717a;
-  }
-
   body {
-    background-color: var(--background);
-    color: var(--text-main);
+    background-color: #000000;
+    color: #f4f4f5;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1 {
+    @apply text-2xl sm:text-3xl font-semibold tracking-tight text-white;
+  }
+
+  h2 {
+    @apply text-base font-semibold text-white;
+  }
+
+  label {
+    @apply block text-xs text-zinc-400 mb-1.5;
   }
 }
 
-.card-transition {
-  transition: border-color 0.15s ease, background-color 0.15s ease;
-}
+/* Petits composants réutilisés sur toutes les pages */
+@layer components {
+  .page {
+    @apply max-w-5xl mx-auto px-4 sm:px-6 py-10;
+  }
 
-.card-transition:hover {
-  border-color: #52525b;
+  .card {
+    @apply bg-zinc-950 border border-zinc-800 rounded-xl;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply bg-white text-black hover:bg-zinc-200;
+  }
+
+  .btn-secondary {
+    @apply bg-zinc-900 text-zinc-200 border border-zinc-800 hover:bg-zinc-800;
+  }
+
+  .input {
+    @apply w-full bg-black border border-zinc-800 rounded-lg px-3 py-2 text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-zinc-500;
+  }
+
+  .badge {
+    @apply inline-block text-[11px] font-mono px-2 py-0.5 rounded-md bg-zinc-900 text-zinc-400 border border-zinc-800;
+  }
+
+  .link {
+    @apply text-zinc-400 hover:text-white transition-colors;
+  }
 }
 
 .article-prose {
   line-height: 1.8;
-  font-size: 1.05rem;
   color: #d4d4d8;
 }
 
-.article-prose h2 {
-  color: #ffffff;
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
-  border-bottom: 1px solid #27272a;
-  padding-bottom: 0.5rem;
-}
-
-.article-prose h3 {
-  color: #f4f4f5;
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.article-prose p {
-  margin-bottom: 1.25rem;
-}
-
-.article-prose ul {
-  list-style-type: disc;
-  margin-left: 1.5rem;
-  margin-bottom: 1.25rem;
-}
-
-.article-prose code {
-  background-color: #18181b;
-  color: #f4f4f5;
-  border: 1px solid #27272a;
-  padding: 0.15rem 0.4rem;
-  border-radius: 0.25rem;
-  font-size: 0.9em;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-}
-
-.article-prose pre {
-  background-color: #09090b;
-  border: 1px solid #27272a;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  overflow-x: auto;
-  margin-bottom: 1.5rem;
-}
-
-.article-prose pre code {
-  background-color: transparent;
-  padding: 0;
-  border: none;
-  color: #f4f4f5;
-}
-
-/* Accessibilité : Focus rings visibles et neutres */
 a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: 2px solid #ffffff;
   outline-offset: 2px;

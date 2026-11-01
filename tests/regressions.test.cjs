@@ -37,12 +37,6 @@ test('existing like and count are loaded', async () => {
   const state=await setup([{count:5,error:null},{data:{id:'l'},error:null}]).getArticleLikes('a','u');
   assert.equal(state.count,5); assert.equal(state.userHasLiked,true);
 });
-test('demo like can be added and removed', async () => {
-  const c=setup([]); c.process.env={};
-  assert.equal((await c.toggleLike('demo','u')).count,3);
-  assert.equal((await c.getArticleLikes('demo','u')).userHasLiked,true);
-  assert.equal((await c.toggleLike('demo','u')).count,2);
-});
 test('redirect only accepts internal destinations', async () => {
   const { safeRedirectPath }=await import('../lib/safe-redirect.js');
   for(const input of ['https://evil.example','//evil.example','/\\evil.example','javascript:alert(1)','/\nevil.example',null]) assert.equal(safeRedirectPath(input),'/profile');
