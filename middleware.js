@@ -7,49 +7,45 @@ function sanitizeUrl(rawUrl) {
 }
 
 export async function middleware(request) {
-  let response = NextResponse.next({
-    request: {
-      headers: request.headers,
-    },
-  });
+  let response = NextResponse.next({ request });
 
   const supabaseUrl = sanitizeUrl(process.env.NEXT_PUBLIC_SUPABASE_URL);
   const supabaseKey = (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '').trim();
+  const configured = supabaseUrl && supabaseKey && !supabaseUrl.includes('placeholder') && !supabaseUrl.includes('your-project');
 
-  const isProtectedPath =
-    request.nextUrl.pathname.startsWith('/profile') ||
-    request.nextUrl.pathname.startsWith('/articles/new') ||
-    request.nextUrl.pathname.endsWith('/edit');
+  let user = null;
 
-  // Si Supabase n'est pas encore configuré en local, autoriser pour la démonstration
-  if (!supabaseUrl || !supabaseKey || supabaseUrl.includes('placeholder') || supabaseUrl.includes('your-project')) {
-    return response;
+  if (configured) {
+    const supabase = createServerClient(supabaseUrl, supabaseKey, {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll();
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
+          response = NextResponse.next({ request });
+          cookiesToSet.forEach(({ name, value, options }) => response.cookies.set(name, value, options));
+        },
+      },
+    });
+
+    const { data } = await supabase.auth.getUser();
+    user = data.user;
   }
 
-  const supabase = createServerClient(supabaseUrl, supabaseKey, {
-    cookies: {
-      getAll() {
-        return request.cookies.getAll();
-      },
-      setAll(cookiesToSet) {
-        cookiesToSet.forEach(({ name, value }) =>
-          request.cookies.set(name, value)
-        );
-        response = NextResponse.next({
-          request,
-        });
-        cookiesToSet.forEach(({ name, value, options }) =>
-          response.cookies.set(name, value, options)
-        );
-      },
-    },
-  });
+  const { pathname } = request.nextUrl;
 
-  const { data: { user } } = await supabase.auth.getUser();
+  // Premier passage sur l'accueil : on propose de se connecter (ou de continuer en visiteur)
+  if (pathname === '/' && !user && !request.cookies.get('devboard_guest')) {
+    return NextResponse.redirect(new URL('/login', request.url));
+  }
 
-  if (isProtectedPath && !user) {
+  // Routes privées : connexion obligatoire (sauf en local sans Supabase, pour la démo)
+  const isProtected = pathname.startsWith('/profile') || pathname === '/articles/new' || pathname.endsWith('/edit');
+
+  if (configured && isProtected && !user) {
     const redirectUrl = new URL('/login', request.url);
-    redirectUrl.searchParams.set('next', request.nextUrl.pathname);
+    redirectUrl.searchParams.set('next', pathname);
     return NextResponse.redirect(redirectUrl);
   }
 
@@ -57,10 +53,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: [
-    '/profile/:path*',
-    '/articles/new',
-    '/articles/:id/edit',
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-  ],
+  matcher: ['/((?!_next/static|_next/image|auth/callback|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)'],
 };

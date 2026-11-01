@@ -46,13 +46,14 @@ Le middleware Next.js intercepte chaque requête avant qu'elle n'atteigne le rou
 1. **Extraction de session** : Lit les cookies chiffrés via le client serveur `@supabase/ssr`.
 2. **Rafraîchissement transparent** : Si le token JWT approche de son expiration, Supabase le renouvelle automatiquement.
 3. **Contrôle d'accès** : Si l'URL demandée figure parmi les routes protégées (`/profile`, `/articles/new`, `/articles/:id/edit`) et qu'aucun utilisateur n'est authentifié, une redirection `307` est renvoyée vers `/login?next=<destination>`.
-4. **Post-connexion** : Après validation réussie, l'utilisateur est automatiquement redirigé vers sa page d'origine grâce au paramètre `next`.
+4. **Écran d'accueil** : Un visiteur non connecté qui arrive sur `/` est redirigé vers `/login`. Le bouton "Continuer sans compte" pose un cookie `devboard_guest` qui désactive cette redirection. La page `/` reste en ISR car la redirection se fait dans le middleware, avant le cache.
+5. **Post-connexion** : Après validation réussie, l'utilisateur est automatiquement redirigé vers sa page d'origine grâce au paramètre `next`.
 
 ---
 
 ## 4. Double Flux : Email / Mot de Passe
 
 Pour les utilisateurs ne disposant pas de compte GitHub, DevBoard intègre un formulaire natif avec validation :
-- **Inscription** (`handleSignUp`) : Création de compte via `supabase.auth.signUp()` avec transmission des métadonnées du nom complet.
-- **Connexion** (`handleSignIn`) : Authentification via `supabase.auth.signInWithPassword()` avec affichage immédiat des messages d'erreur éventuels (identifiants invalides, mot de passe trop court).
+- **Inscription** (`handleEmail`) : Création de compte via `supabase.auth.signUp()` avec le début de l'email comme nom affiché.
+- **Connexion** (`handleEmail`) : Authentification via `supabase.auth.signInWithPassword()` avec affichage immédiat des messages d'erreur éventuels (identifiants invalides, mot de passe trop court).
 - **Déconnexion** : Révocation du token et nettoyage complet des cookies HTTP via `supabase.auth.signOut()`.

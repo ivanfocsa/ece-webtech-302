@@ -4,7 +4,7 @@ import { safeRedirectPath } from '@/lib/safe-redirect';
 
 export async function GET(request) {
   const requestUrl = new URL(request.url);
-  const next = safeRedirectPath(requestUrl.searchParams.get('next'));
+  const next = safeRedirectPath(requestUrl.searchParams.get('next'), '/');
   const failure = new URL('/login', requestUrl.origin);
   failure.searchParams.set('error', 'auth_callback');
   failure.searchParams.set('next', next);
