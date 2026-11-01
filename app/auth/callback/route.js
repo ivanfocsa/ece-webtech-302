@@ -9,7 +9,13 @@ export async function GET(request) {
   failure.searchParams.set('error', 'auth_callback');
   failure.searchParams.set('next', next);
   const code = requestUrl.searchParams.get('code');
-  if (!code || requestUrl.searchParams.has('error')) return NextResponse.redirect(failure);
+  if (requestUrl.searchParams.has('error')) return NextResponse.redirect(failure);
+  // Une ouverture directe du callback ne constitue pas un échec OAuth.
+  if (!code) {
+    const login = new URL('/login', requestUrl.origin);
+    login.searchParams.set('next', next);
+    return NextResponse.redirect(login);
+  }
   try {
     const supabase = await createClient();
     const { error } = await supabase.auth.exchangeCodeForSession(code);
