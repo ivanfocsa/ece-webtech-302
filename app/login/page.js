@@ -2,6 +2,7 @@
 
 import { useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { safeRedirectPath } from '@/lib/safe-redirect';
 import { createClient } from '@/lib/supabase/client';
 
 function GitHubIcon() {
@@ -14,7 +15,7 @@ function GitHubIcon() {
 
 function LoginForm() {
   const searchParams = useSearchParams();
-  const next = searchParams.get('next') || '/';
+  const next = safeRedirectPath(searchParams.get('next'), '/');
   const router = useRouter();
 
   const [showEmail, setShowEmail] = useState(false);
@@ -22,39 +23,52 @@ function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(searchParams.get('error') === 'auth_callback' ? 'La connexion a échoué. Veuillez réessayer.' : '');
+
+  const requireConfiguration = () => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+    if (!url || !key || /placeholder|your-project/.test(url) || key === 'placeholder-anon-key') {
+      throw new Error('La connexion est temporairement indisponible. Veuillez réessayer plus tard.');
+    }
+  };
 
   const signInWithGitHub = async () => {
     setMessage('');
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'github',
-      options: { redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
-    });
-    if (error) setMessage(error.message);
+    setLoading(true);
+    try {
+      requireConfiguration();
+      const { error } = await createClient().auth.signInWithOAuth({
+        provider: 'github',
+        options: { redirectTo: `${window.location.origin}/auth/callback?next=${encodeURIComponent(next)}` },
+      });
+      if (error) throw error;
+    } catch (error) {
+      setMessage(error.message || 'La connexion a échoué.');
+    } finally { setLoading(false); }
   };
 
   const handleEmail = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage('');
-
-    const supabase = createClient();
-    const { error } = signup
-      ? await supabase.auth.signUp({ email: email.trim(), password, options: { data: { full_name: email.split('@')[0] } } })
-      : await supabase.auth.signInWithPassword({ email: email.trim(), password });
-
-    setLoading(false);
-
-    if (error) {
-      setMessage(error.message);
-    } else if (signup) {
-      setMessage('Compte créé. Vous pouvez maintenant vous connecter.');
-      setSignup(false);
-    } else {
-      router.push(next);
-      router.refresh();
-    }
+    try {
+      requireConfiguration();
+      const supabase = createClient();
+      const { error } = signup
+        ? await supabase.auth.signUp({ email: email.trim(), password, options: { data: { full_name: email.split('@')[0] } } })
+        : await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      if (error) throw error;
+      if (signup) {
+        setMessage('Compte créé. Vous pouvez maintenant vous connecter.');
+        setSignup(false);
+      } else {
+        router.push(next);
+        router.refresh();
+      }
+    } catch (error) {
+      setMessage(error.message || 'La connexion a échoué.');
+    } finally { setLoading(false); }
   };
 
   const continueAsGuest = () => {
@@ -71,7 +85,7 @@ function LoginForm() {
         </div>
 
         <div className="space-y-3">
-          <button type="button" onClick={signInWithGitHub} className="btn btn-primary w-full py-2.5">
+          <button type="button" onClick={signInWithGitHub} disabled={loading} className="btn btn-primary w-full py-2.5">
             <GitHubIcon />
             Se connecter avec GitHub
           </button>
