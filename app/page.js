@@ -11,17 +11,19 @@ export default async function HomePage() {
 
   return (
     <div className="page space-y-12">
-      <section className="space-y-4">
-        <span className="badge">ISR · 60 s</span>
-        <h1>Partage d&apos;articles et veille technique</h1>
-        <p className="text-zinc-400 max-w-xl">
-          Publiez, lisez et commentez des articles entre développeurs.
-        </p>
-        <WeatherWidget />
-        <div className="flex gap-3 pt-2">
-          <Link href="/articles" className="btn btn-primary">Voir les articles</Link>
-          <Link href="/articles/new" className="btn btn-secondary">Écrire un article</Link>
+      <section className="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+        <div className="space-y-4">
+          <span className="badge">ISR · 60 s</span>
+          <h1>Partage d&apos;articles et veille technique</h1>
+          <p className="text-zinc-400 max-w-xl">
+            Publiez, lisez et commentez des articles entre développeurs.
+          </p>
+          <div className="flex gap-3 pt-2">
+            <Link href="/articles" className="btn btn-primary">Voir les articles</Link>
+            <Link href="/articles/new" className="btn btn-secondary">Écrire un article</Link>
+          </div>
         </div>
+        <WeatherWidget />
       </section>
 
       <section className="space-y-4">
